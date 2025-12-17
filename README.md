@@ -2,7 +2,7 @@
 
 Dự án này xây dựng và so sánh hai hệ thống Dịch máy Nơ-ron (Neural Machine Translation - NMT) để dịch văn bản từ tiếng Anh sang tiếng Pháp. Dự án được triển khai bằng **PyTorch** và thực hiện so sánh giữa mô hình **Seq2Seq LSTM** cơ bản và mô hình **Seq2Seq tích hợp cơ chế Attention**.
 
-## Cấu trúc Dự án
+## Cấu trúc dự án
 
 ```text
 NLP_Project/
@@ -26,7 +26,7 @@ NLP_Project/
 └── README.md
 ```
 
-## Yêu cầu Hệ thống
+## Yêu cầu hệ thống
 
 ### Thư viện Python
 Dự án yêu cầu Python 3.x và các thư viện sau:
@@ -52,7 +52,7 @@ python -m spacy download fr_core_news_sm
 
 ## Phương pháp & Kiến trúc Mô hình
 
-### 1. Tiền xử lý Dữ liệu
+### 1. Tiền xử lý dữ liệu
 *   **Làm sạch:** Loại bỏ thẻ HTML, chuẩn hóa khoảng trắng, chuyển về chữ thường.
 *   **Tokenization:** Sử dụng Spacy (`en_core_web_sm` cho tiếng Anh, `fr_core_news_sm` cho tiếng Pháp).
 *   **Từ điển (Vocabulary):** Giới hạn kích thước (ví dụ: 10,000 từ phổ biến nhất), thêm các token đặc biệt: `<unk>`, `<pad>`, `<sos>`, `<eos>`.
@@ -82,7 +82,7 @@ Quy trình huấn luyện được thực hiện trong file `scripts/en_fr.ipynb
     *   **BLEU Score:** Đánh giá chất lượng dịch trên tập Test.
     *   **Biểu đồ:** So sánh trực quan quá trình hội tụ của hai mô hình.
 
-## Hướng dẫn Sử dụng
+## Hướng dẫn sử dụng
 
 1.  Đảm bảo dữ liệu đã được tải vào thư mục `dataset/raw/` đúng theo cấu trúc.
 2.  Mở file `scripts/en_fr.ipynb` bằng Jupyter Notebook hoặc VS Code.
@@ -92,7 +92,7 @@ Quy trình huấn luyện được thực hiện trong file `scripts/en_fr.ipynb
     *   Huấn luyện mô hình Attention.
     *   So sánh kết quả và dịch thử câu văn bất kỳ.
 
-## Kết quả Mong đợi
+## Kết quả mong đợi
 
 Sau khi chạy notebook, bạn sẽ nhận được:
 *   Hai file model (`.pth`) lưu trạng thái tốt nhất.
