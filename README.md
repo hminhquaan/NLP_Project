@@ -1,107 +1,115 @@
 # Dịch máy Nơ-ron Anh-Pháp (English-French Neural Machine Translation)
 
-Dự án này triển khai một hệ thống Dịch máy Nơ-ron (NMT) để dịch văn bản tiếng Anh sang tiếng Pháp sử dụng PyTorch. Dự án khám phá và so sánh hai kiến trúc Sequence-to-Sequence (Seq2Seq): mô hình LSTM hai chiều tiêu chuẩn và mô hình nâng cao tích hợp Cơ chế Chú ý (Attention Mechanism).
+Dự án này xây dựng và so sánh hai hệ thống Dịch máy Nơ-ron (Neural Machine Translation - NMT) để dịch văn bản từ tiếng Anh sang tiếng Pháp. Dự án được triển khai bằng **PyTorch** và thực hiện so sánh giữa mô hình **Seq2Seq LSTM** cơ bản và mô hình **Seq2Seq tích hợp cơ chế Attention**.
 
-## Tổng quan dự án
+## Cấu trúc Dự án
 
-Mục tiêu của dự án là xây dựng một mô hình học sâu có khả năng dịch các câu tiếng Anh sang tiếng Pháp. Dự án bao gồm toàn bộ quy trình từ tiền xử lý dữ liệu, xây dựng từ điển đến huấn luyện và đánh giá mô hình.
-
-### Các tính năng chính
-*   **Tiền xử lý dữ liệu:**
-    *   Tách từ (Tokenization) sử dụng `spacy` (tiếng Anh & tiếng Pháp).
-    *   Làm sạch văn bản (loại bỏ HTML, chuẩn hóa).
-    *   Tải dữ liệu hiệu quả với `torch.utils.data.Dataset` và `DataLoader`.
-    *   Xử lý các chuỗi có độ dài thay đổi bằng padding và packing.
-*   **Kiến trúc mô hình:**
-    1.  **Seq2Seq (Cơ bản):**
-        *   **Encoder:** LSTM hai chiều (Bidirectional LSTM) để nắm bắt ngữ cảnh từ cả hai hướng.
-        *   **Decoder:** LSTM một chiều (Unidirectional LSTM).
-    2.  **Seq2Seq với Attention:**
-        *   Tích hợp Cơ chế Chú ý để cho phép decoder tập trung vào các phần cụ thể của câu nguồn tại mỗi bước, cải thiện chất lượng dịch cho các câu dài.
-*   **Huấn luyện:**
-    *   Chiến lược Teacher Forcing.
-    *   Dừng sớm (Early Stopping) để ngăn chặn overfitting.
-    *   Tối ưu hóa hàm mất mát CrossEntropyLoss.
-*   **Đánh giá:**
-    *   **Điểm BLEU:** Thước đo tiêu chuẩn cho chất lượng dịch máy.
-    *   **Độ chính xác (Accuracy):** Độ chính xác ở cấp độ token.
-    *   **Perplexity (PPL):** Thước đo mức độ mô hình dự đoán mẫu tốt như thế nào.
-
-## Cấu trúc dự án
-
-```
+```text
 NLP_Project/
 ├── dataset/
-│   └── raw/                # Chứa các file dữ liệu nén (.gz)
-│       ├── train.en.gz
-│       ├── train.fr.gz
-│       ├── val.en.gz
-│       ├── val.fr.gz
-│       ├── test.en.gz
-│       └── test.fr.gz
+│   └── raw/                # Thư mục chứa dữ liệu thô (nén .gz)
+│       ├── train.en.gz     # Tập huấn luyện (Anh)
+│       ├── train.fr.gz     # Tập huấn luyện (Pháp)
+│       ├── val.en.gz       # Tập kiểm thử (Anh)
+│       ├── val.fr.gz       # Tập kiểm thử (Pháp)
+│       ├── test.en.gz      # Tập đánh giá (Anh)
+│       └── test.fr.gz      # Tập đánh giá (Pháp)
 ├── scripts/
-│   ├── en_fr.ipynb         # Notebook chính để huấn luyện và suy luận
-│   └── models/             # Thư mục lưu các mô hình đã huấn luyện
-│       ├── best_model.pth       # Mô hình cơ bản tốt nhất
-│       ├── best_model_attn.pth  # Mô hình attention tốt nhất
-│       └── ...
+│   ├── en_fr.ipynb         # Notebook chính (Tiền xử lý, Train, Eval)
+│   └── models/             # Thư mục lưu trữ model và lịch sử huấn luyện
+│       ├── best_model.pth       # Checkpoint model cơ bản tốt nhất
+│       ├── best_model_attn.pth  # Checkpoint model attention tốt nhất
+│       ├── training_history.json
+│       ├── history_attn.json
+│       └── comparison_chart.png # Biểu đồ so sánh kết quả
 ├── LICENSE
 └── README.md
 ```
 
-## Yêu cầu hệ thống
+## Yêu cầu Hệ thống
 
-Để chạy dự án này, bạn cần các thư viện sau:
+### Thư viện Python
+Dự án yêu cầu Python 3.x và các thư viện sau:
+*   `torch`: Framework Deep Learning.
+*   `spacy`: Xử lý ngôn ngữ tự nhiên (Tokenization).
+*   `nltk`: Tính điểm BLEU.
+*   `pandas`, `matplotlib`: Xử lý dữ liệu và vẽ biểu đồ.
+*   `tqdm`: Hiển thị thanh tiến trình.
 
-*   Python 3.x
-*   PyTorch
-*   Spacy
-*   NLTK
-*   Tqdm
-
-Có thể cài đặt các thư viện phụ thuộc bằng pip:
+### Cài đặt
+Chạy lệnh sau để cài đặt các gói cần thiết:
 
 ```bash
-pip install torch spacy nltk tqdm
+pip install torch spacy nltk pandas matplotlib tqdm
+```
+
+Tải các mô hình ngôn ngữ cho Spacy:
+
+```bash
 python -m spacy download en_core_web_sm
 python -m spacy download fr_core_news_sm
 ```
 
-## Hướng dẫn
+## Phương pháp & Kiến trúc Mô hình
 
-Toàn bộ quy trình làm việc nằm trong notebook `scripts/en_fr.ipynb`.
+### 1. Tiền xử lý Dữ liệu
+*   **Làm sạch:** Loại bỏ thẻ HTML, chuẩn hóa khoảng trắng, chuyển về chữ thường.
+*   **Tokenization:** Sử dụng Spacy (`en_core_web_sm` cho tiếng Anh, `fr_core_news_sm` cho tiếng Pháp).
+*   **Từ điển (Vocabulary):** Giới hạn kích thước (ví dụ: 10,000 từ phổ biến nhất), thêm các token đặc biệt: `<unk>`, `<pad>`, `<sos>`, `<eos>`.
 
-1.  **Chuẩn bị dữ liệu:**
-    Script tự động kiểm tra dữ liệu trong `dataset/raw/`. Đảm bảo các file `.gz` của bạn được đặt đúng vị trí.
+### 2. Mô hình Seq2Seq (Baseline)
+*   **Encoder:** LSTM 2 lớp, 2 chiều (Bidirectional).
+*   **Decoder:** LSTM 2 lớp, 1 chiều (Unidirectional).
+*   **Cơ chế:** Vector ngữ cảnh (context vector) được tạo từ trạng thái ẩn cuối cùng của Encoder và truyền vào Decoder.
 
-2.  **Huấn luyện:**
-    Chạy các cell trong notebook để bắt đầu huấn luyện. Notebook cho phép bạn huấn luyện cả mô hình Seq2Seq cơ bản và mô hình Attention.
-    *   Các siêu tham số như `BATCH_SIZE`, `LEARNING_RATE`, `N_EPOCHS`, `HID_DIM` có thể cấu hình ở đầu các phần huấn luyện.
+### 3. Mô hình Seq2Seq với Attention
+*   **Encoder:** Tương tự Baseline.
+*   **Attention Layer:** Tính toán trọng số chú ý (attention weights) dựa trên trạng thái ẩn của Decoder và toàn bộ đầu ra của Encoder.
+*   **Decoder:** Sử dụng vector ngữ cảnh có trọng số (weighted context vector) để tập trung vào các phần quan trọng của câu nguồn tại mỗi bước dịch.
 
-3.  **Suy luận / Dịch:**
-    Sử dụng hàm `translate` để dịch các câu tùy chỉnh:
-    ```python
-    sentence = "Hello, how are you?"
-    translation = translate(sentence)
-    print(f"English: {sentence}")
-    print(f"French: {translation}")
-    ```
+## Huấn luyện & Đánh giá
 
-4.  **Đánh giá:**
-    Notebook bao gồm các phần để đánh giá mô hình trên tập Test, tính toán Loss, Accuracy và điểm BLEU.
+Quy trình huấn luyện được thực hiện trong file `scripts/en_fr.ipynb`:
 
-## Chi tiết mô hình
+1.  **Cấu hình:**
+    *   Optimizer: Adam (Learning rate: 0.001).
+    *   Loss Function: CrossEntropyLoss (bỏ qua padding).
+    *   Batch size: 128.
+    *   Epochs: 15 (có Early Stopping với patience = 3).
 
-### Seq2Seq Cơ bản
-*   **Encoder:** LSTM hai chiều 2 lớp.
-*   **Decoder:** LSTM một chiều 2 lớp.
-*   **Kích thước Embedding:** 256.
-*   **Kích thước Ẩn (Hidden Dimension):** 512.
-*   **Dropout:** 0.5.
+2.  **Đánh giá:**
+    *   **Loss & Accuracy:** Theo dõi trên tập Validation qua từng epoch.
+    *   **BLEU Score:** Đánh giá chất lượng dịch trên tập Test.
+    *   **Biểu đồ:** So sánh trực quan quá trình hội tụ của hai mô hình.
 
-### Mô hình Attention
-*   **Lớp Attention:** Tính toán điểm năng lượng giữa trạng thái ẩn của decoder và đầu ra của encoder để tạo vector ngữ cảnh.
-*   **Decoder:** Nối vector ngữ cảnh với đầu vào đã được nhúng (embedded input) để dự đoán token tiếp theo.
+## Hướng dẫn Sử dụng
+
+1.  Đảm bảo dữ liệu đã được tải vào thư mục `dataset/raw/` đúng theo cấu trúc.
+2.  Mở file `scripts/en_fr.ipynb` bằng Jupyter Notebook hoặc VS Code.
+3.  Chạy tuần tự các cell để:
+    *   Xử lý dữ liệu.
+    *   Huấn luyện mô hình Baseline.
+    *   Huấn luyện mô hình Attention.
+    *   So sánh kết quả và dịch thử câu văn bất kỳ.
+
+## Kết quả Mong đợi
+
+Sau khi chạy notebook, bạn sẽ nhận được:
+*   Hai file model (`.pth`) lưu trạng thái tốt nhất.
+*   File JSON lưu lịch sử huấn luyện.
+*   Biểu đồ so sánh Loss/Accuracy giữa hai mô hình.
+*   Điểm BLEU trên tập Test.
+
+---
+**Lưu ý:** Thời gian huấn luyện có thể lâu tùy thuộc vào phần cứng (khuyến nghị sử dụng GPU).
+
+###  Thông tin chung
+* **Giảng viên hướng dẫn:** PGS.TS.Nguyễn Tuấn Đăng
+* **Lớp:** DCT122C3
+
+###  Nhóm sinh viên thực hiện:
+1. **Họ và tên:** Huỳnh Minh Quân - **MSSV:** 3122411167
+2. **Họ và tên:** Hồ Thái Vũ - **MSSV:** 3122411251
 
 ## License
 
