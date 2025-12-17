@@ -103,8 +103,8 @@ Sau khi chạy notebook, bạn sẽ nhận được:
 ---
 **Lưu ý:** Thời gian huấn luyện có thể lâu tùy thuộc vào phần cứng (khuyến nghị sử dụng GPU).
 
-###  Thông tin chung
-* **Giảng viên hướng dẫn:** PGS.TS.Nguyễn Tuấn Đăng
+##  Thông tin chung
+* **Giảng viên   hướng dẫn:** PGS.TS.Nguyễn Tuấn Đăng
 * **Lớp:** DCT122C3
 
 ###  Nhóm sinh viên thực hiện:
