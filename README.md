@@ -18,7 +18,7 @@ NLP_Project/
 │   ├── en_fr.ipynb         # Notebook chính (Tiền xử lý, Train, Eval)
 │   └── models/             # Thư mục lưu trữ model và lịch sử huấn luyện
 │       ├── best_model.pth       # Checkpoint model cơ bản tốt nhất
-│       ├── best_model_attn.pth  # Checkpoint model attention tốt nhất
+│       ├── best_model_attn.pth  # Checkpoint model attention (Kích thước lớn -> không push)
 │       ├── training_history.json
 │       ├── history_attn.json
 │       └── comparison_chart.png # Biểu đồ so sánh kết quả
