@@ -108,8 +108,10 @@ Sau khi chạy notebook, bạn sẽ nhận được:
 * **Lớp:** DCT122C3
 
 ###  Nhóm sinh viên thực hiện:
-1. **Họ và tên:** Huỳnh Minh Quân - **MSSV:** 3122411167
-2. **Họ và tên:** Hồ Thái Vũ - **MSSV:** 3122411251
+| MSSV | Họ và tên |
+| --- | --- |
+| 3122411251 | Hồ Thái Vũ |
+| 3122411167 | Huỳnh Minh Quân |
 
 ## License
 
